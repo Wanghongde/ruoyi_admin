@@ -1,4 +1,6 @@
 import { login } from '@/api/user'
+import { Message } from 'element-ui'
+import { setToken } from '@/utlis/auth'
 
 const user = {
   state: {
@@ -13,16 +15,17 @@ const user = {
     Login({commit}, form) {
       return new Promise(async (resolve, reject) => {
         try {
-          const {data} = await login(form)
+          const { data } = await login(form)
 
-          localStorage.setItem('token', data.token)
+          Message.success(data.msg)
+
+          setToken(data.token)
           commit('setToken', data.token)
           resolve(data)
         } catch(e) {
           reject(e)
         }
       })
-
     }
   }
 }

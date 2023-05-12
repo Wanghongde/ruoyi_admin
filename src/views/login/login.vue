@@ -25,14 +25,15 @@
 <script>
 import { getCodeImg } from '@/api/user'
 import { mapActions } from 'vuex'
+import { setToken, removeToken } from '@/utlis/auth'
 
 export default {
   name: 'login-container',
   data() {
     return {
       form: {
-        username: '',
-        username: '',
+        username: 'admin',
+        password: 'admin',
         code: '',
         uuid: ''
       },
@@ -60,25 +61,27 @@ export default {
     ...mapActions(['Login']),
     async getCodeImgFn () {
       const { data } = await getCodeImg()
-
       this.codeImg = 'data:image/gif;base64,' + data.img
       this.form.uuid = data.uuid
     },
     onLogin() {
-      this.$refs.form.validate(valid => {
+      this.$refs.form.validate(async valid => {
         if (!valid) {
           return
         }
 
         if(this.isRemenber) {
-          localStorage.setItem('login_form', JSON.stringify(this.form))
+          setToken('login_form', JSON.stringify(this.form))
         } else {
-          localStorage.removeItem('login_form')
+          removeToken('login_form')
         }
 
-        this.Login(this.form).then(res => {
-          this.$router.push('/index')
-        })
+        try {
+          await this.Login(this.form)
+          this.$router.push('/')
+        } catch(e) {
+          this.getCodeImgFn()
+        }
       })
     }
   }
