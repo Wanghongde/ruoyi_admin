@@ -11,10 +11,8 @@ router.beforeEach((to, from, next) => {
     } else {
       if(store.getters.roles.length === 0) {
         store.dispatch('getUser').then(res=> {
-          console.log(res)
           next()
         }).catch(e => {
-          console.log('permission', e)
           next()
         })
       }

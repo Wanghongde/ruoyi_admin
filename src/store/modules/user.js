@@ -5,11 +5,26 @@ import { setToken } from '@/utlis/auth'
 const user = {
   state: {
     token: '',
-    roles: []
+    roles: [],
+    permissions: '',
+    name: '',
+    avatar: '',
   },
   mutations: {
     setToken(state, token) {
       state.token = token
+    },
+    setRoles(state, roles) {
+      state.roles = roles
+    },
+    setPermissions(state, permissions) {
+      state.permissions = permissions
+    },
+    setName(state, name) {
+      state.name = name
+    },
+    setAvatar(state, avatar) {
+      state.avatar = name
     }
   },
   actions: {
@@ -31,9 +46,20 @@ const user = {
     getUser({commit}) {
       return new Promise(async (resolve, reject) => {
         try {
-          const { data } = await getUserInfo()
-          console.log(888, data)
-          resolve()
+          const { data: {permissions, roles, user} } = await getUserInfo()
+          const avatar = user.avatar ? '' + user.avatar : require('@/assets/user_avatar.jpeg')
+
+          if(roles && roles.length) {
+            commit('setRoles', roles)
+            commit('setPermissions', permissions)
+          } else {
+            commit('setRoles', roles)
+          }
+
+          commit('setName', user.username)
+          commit('setAvatar', avatar)
+
+          resolve(user)
         } catch(e) {
           reject(e)
         }

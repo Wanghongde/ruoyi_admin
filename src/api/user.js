@@ -4,6 +4,9 @@ export const login = data => {
   return request({
     url: '/login',
     method: 'POST',
+    headers: {
+      noToken: true
+    },
     data
   })
 }
@@ -11,6 +14,9 @@ export const login = data => {
 export const getCodeImg = () => {
   return request({
     url: '/captchaImage',
+    headers: {
+      noToken: true
+    },
     method: 'GET'
   })
 }
