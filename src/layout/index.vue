@@ -2,7 +2,7 @@
   <div class="layout-box">
     <side-bar></side-bar>
 
-    <div>
+    <div class="main-app-box">
       <div>
         <nav-bar></nav-bar>
         <tags-view></tags-view>
@@ -29,6 +29,13 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang="scss" scoped>
+.layout-box {
+  width: 100%;
+  height: 100%;
+  .main-app-box {
+    margin-left: 200px;
+    min-height: 100%;
+  }
+}
 </style>

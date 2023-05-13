@@ -1,6 +1,6 @@
-import { login, getUserInfo } from '@/api/user'
+import { login, getUserInfo, logout } from '@/api/user'
 import { Message } from 'element-ui'
-import { setToken } from '@/utlis/auth'
+import { removeToken, setToken } from '@/utlis/auth'
 
 const user = {
   state: {
@@ -28,7 +28,7 @@ const user = {
     }
   },
   actions: {
-    Login({ commit }, form) {
+    Login({commit}, form) {
       return new Promise(async (resolve, reject) => {
         try {
           const { data } = await login(form)
@@ -60,6 +60,23 @@ const user = {
           commit('setAvatar', avatar)
 
           resolve(user)
+        } catch(e) {
+          reject(e)
+        }
+      })
+    },
+    logOut({commit}) {
+      return new Promise(async (resolve, reject) => {
+        try {
+          const data = await logout()
+
+          commit('setRoles', '')
+          commit('setPermissions', '')
+          commit('setName', '')
+          commit('setAvatar', '')
+          removeToken()
+
+          resolve(data)
         } catch(e) {
           reject(e)
         }

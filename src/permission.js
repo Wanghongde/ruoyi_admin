@@ -1,20 +1,26 @@
 import router from '@/router/index'
 import { getToken } from '@/utlis/auth'
 import store from '@/store/index'
+import { Message } from 'element-ui'
 
 const whiteList = ['/login', '/404']
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   if(getToken()) {
     if(to.path === '/login') {
       next('/')
     } else {
       if(store.getters.roles.length === 0) {
-        store.dispatch('getUser').then(res=> {
+        try {
+          await store.dispatch('getUser')
           next()
-        }).catch(e => {
-          next()
-        })
+        } catch(e) {
+          await store.dispatch('logOut')
+          Message.error(e)
+          next('/login')
+        }
+      } else {
+        next()
       }
     }
   } else {

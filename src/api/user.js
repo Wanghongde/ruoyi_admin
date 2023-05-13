@@ -27,3 +27,10 @@ export const getUserInfo = () => {
     method: 'GET'
   })
 }
+
+export const logout = () => {
+  return request({
+    url: '/logout',
+    method: 'POST'
+  })
+}
