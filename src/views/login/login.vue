@@ -33,7 +33,7 @@ export default {
     return {
       form: {
         username: 'admin',
-        password: 'admin',
+        password: 'admin123',
         code: '',
         uuid: ''
       },
@@ -71,13 +71,19 @@ export default {
         }
 
         if(this.isRemenber) {
-          setToken('login_form', JSON.stringify(this.form))
+          setToken(JSON.stringify(this.form), 'login_form')
         } else {
           removeToken('login_form')
         }
 
         try {
           await this.Login(this.form)
+
+          const query = this.$route.query
+          if(query && query.redirect) {
+            return this.$router.push(query.redirect)
+          }
+
           this.$router.push('/')
         } catch(e) {
           this.getCodeImgFn()

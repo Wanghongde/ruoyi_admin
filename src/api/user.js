@@ -8,9 +8,16 @@ export const login = data => {
   })
 }
 
-export const getCodeImg = data => {
+export const getCodeImg = () => {
   return request({
     url: '/captchaImage',
+    method: 'GET'
+  })
+}
+
+export const getUserInfo = () => {
+  return request({
+    url: '/getInfo',
     method: 'GET'
   })
 }

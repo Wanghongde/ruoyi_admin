@@ -9,7 +9,11 @@ const instance = axios.create({
 instance.interceptors.response.use(res => {
   const {data, headers} = res
 
-  if(data.code === 500) {
+  console.log(111, data.code)
+  if(data.code === 401) {
+    Message.error(data.msg)
+    return Promise.reject(data.msg)
+  } else if(data.code === 500) {
     Message.error(data.msg)
     return Promise.reject(data.msg)
   }

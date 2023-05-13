@@ -1,10 +1,11 @@
-import { login } from '@/api/user'
+import { login, getUserInfo } from '@/api/user'
 import { Message } from 'element-ui'
 import { setToken } from '@/utlis/auth'
 
 const user = {
   state: {
-    token: ''
+    token: '',
+    roles: []
   },
   mutations: {
     setToken(state, token) {
@@ -12,7 +13,7 @@ const user = {
     }
   },
   actions: {
-    Login({commit}, form) {
+    Login({ commit }, form) {
       return new Promise(async (resolve, reject) => {
         try {
           const { data } = await login(form)
@@ -22,6 +23,17 @@ const user = {
           setToken(data.token)
           commit('setToken', data.token)
           resolve(data)
+        } catch(e) {
+          reject(e)
+        }
+      })
+    },
+    getUser({commit}) {
+      return new Promise(async (resolve, reject) => {
+        try {
+          const { data } = await getUserInfo()
+          console.log(888, data)
+          resolve()
         } catch(e) {
           reject(e)
         }
