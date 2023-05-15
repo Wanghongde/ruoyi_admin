@@ -2,7 +2,7 @@
   <div class="side-bar-item">
     <div v-if="!item.hidden" >
       <template v-if="hasOneShowChild(item.children, item)">
-        <app-link :path="basePath">
+        <app-link :path="resolvePath(onlyOneChild.path)">
           <el-menu-item :index="basePath">
             <menu-item :icon="onlyOneChild.meta.icon" :title="onlyOneChild.meta.title" />
           </el-menu-item>
@@ -55,32 +55,27 @@ export default {
       return path.resolve(this.basePath, url)
     },
     hasOneShowChild(children, parent) {
-      if(!children) {
+      if (!children) {
         children = []
       }
-
       const showingChildren = children.filter(item => {
-        if(item.hidden) {
+        if (item.hidden) {
           return false
         } else {
           this.onlyOneChild = item
           return true
         }
       })
-
-      if(showingChildren.length === 1) {
+      if (showingChildren.length === 1) {
         return true
       }
-
-      if(showingChildren.length === 0) {
+      if (showingChildren.length === 0) {
         this.onlyOneChild = {
           ...parent,
           path: ''
         }
-
         return true
       }
-
       return false
     }
   }

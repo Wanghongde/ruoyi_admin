@@ -14,9 +14,8 @@ router.beforeEach(async (to, from, next) => {
         try {
           await store.dispatch('getUser')
 
-          const data = await store.dispatch('GenrateRoutes')
-          router.addRoutes(data)
-          console.log(router)
+          const accessRoutes = await store.dispatch('GenrateRoutes')
+          router.addRoutes(accessRoutes)
           next()
         } catch(e) {
           await store.dispatch('logOut')
