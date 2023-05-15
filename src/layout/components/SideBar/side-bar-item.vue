@@ -52,7 +52,7 @@ export default {
   },
   methods: {
     resolvePath(url) {
-      return path.resolve(this.basePath, url)
+      return path.join(this.basePath, url)
     },
     hasOneShowChild(children, parent) {
       if (!children) {

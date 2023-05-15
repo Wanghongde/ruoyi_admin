@@ -3,11 +3,12 @@
     <logo></logo>
     <el-scrollbar class="scroll-box">
       <el-menu
-        default-active="2"
+        :default-active="$route.path"
         class="el-menu-vertical-demo"
         :background-color="globalColor.menuBackground"
         text-color="#fff"
         :unique-opened="true"
+        :collapse="isCollapse"
         active-text-color="#ffd04b">
         <side-bar-item
           v-for="(item, index) in siderbarRouters"
@@ -30,6 +31,11 @@ export default {
   components: {
     Logo,
     SideBarItem
+  },
+  data() {
+    return {
+      isCollapse: false
+    }
   },
   computed:{
     ...mapGetters(['siderbarRouters']),

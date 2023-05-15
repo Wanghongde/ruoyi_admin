@@ -16,7 +16,7 @@ router.beforeEach(async (to, from, next) => {
 
           const accessRoutes = await store.dispatch('GenrateRoutes')
           router.addRoutes(accessRoutes)
-          next()
+          next({...to})
         } catch(e) {
           await store.dispatch('logOut')
           Message.error(e)
