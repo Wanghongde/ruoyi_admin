@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import logoImg from '@/assets/logo.png'
+import logoImg from '@/assets/user/logo.png'
 
 export default {
   data() {

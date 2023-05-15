@@ -101,7 +101,7 @@ export default {
   align-items: center;
   width: 100%;
   height: 100%;
-  background: url("@/assets/login_bg.jpeg");
+  background: url("@/assets/user/login_bg.jpeg");
   background-size: cover;
 
   .form-box {

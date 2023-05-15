@@ -1,5 +1,6 @@
 <template>
   <div class="menu-item">
+    <svg-icon :icon-class="icon"></svg-icon>
     <span>{{title}}</span>
   </div>
 </template>

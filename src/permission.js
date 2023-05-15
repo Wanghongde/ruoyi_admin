@@ -13,6 +13,8 @@ router.beforeEach(async (to, from, next) => {
       if(store.getters.roles.length === 0) {
         try {
           await store.dispatch('getUser')
+
+          await store.dispatch('GenrateRoutes')
           next()
         } catch(e) {
           await store.dispatch('logOut')

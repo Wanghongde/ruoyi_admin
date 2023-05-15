@@ -47,7 +47,7 @@ const user = {
       return new Promise(async (resolve, reject) => {
         try {
           const { data: {permissions, roles, user} } = await getUserInfo()
-          const avatar = user.avatar ? '' + user.avatar : require('@/assets/user_avatar.jpeg')
+          const avatar = user.avatar ? '' + user.avatar : require('@/assets/user/user_avatar.jpeg')
 
           if(roles && roles.length) {
             commit('setRoles', roles)
