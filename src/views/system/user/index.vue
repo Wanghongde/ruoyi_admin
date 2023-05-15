@@ -1,10 +1,10 @@
 <template>
-  <div class="index-container">首页</div>
+  <div>用户</div>
 </template>
 
 <script>
 export default {
-  name: 'index-container'
+
 }
 </script>
 

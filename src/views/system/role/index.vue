@@ -1,10 +1,12 @@
 <template>
-  <div class="index-container">首页</div>
+  <div>
+    role
+  </div>
 </template>
 
 <script>
 export default {
-  name: 'index-container'
+
 }
 </script>
 

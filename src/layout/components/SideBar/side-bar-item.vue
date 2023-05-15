@@ -1,11 +1,13 @@
 <template>
   <div class="side-bar-item">
-    <div v-if="!item.hidden">
-      <app-link v-if="!item.children" :path="basePath">
-        <el-menu-item :index="basePath">
-          <menu-item :icon="item.meta.icon" :title="item.meta.title" />
-        </el-menu-item>
-      </app-link>
+    <div v-if="!item.hidden" >
+      <template v-if="hasOneShowChild(item.children, item)">
+        <app-link :path="basePath">
+          <el-menu-item :index="basePath">
+            <menu-item :icon="onlyOneChild.meta.icon" :title="onlyOneChild.meta.title" />
+          </el-menu-item>
+        </app-link>
+      </template>
 
       <el-submenu v-else :index="basePath">
         <template slot="title">
@@ -43,9 +45,43 @@ export default {
       default: '/'
     }
   },
+  data() {
+    return {
+      onlyOneChild: ''
+    }
+  },
   methods: {
     resolvePath(url) {
       return path.resolve(this.basePath, url)
+    },
+    hasOneShowChild(children, parent) {
+      if(!children) {
+        children = []
+      }
+
+      const showingChildren = children.filter(item => {
+        if(item.hidden) {
+          return false
+        } else {
+          this.onlyOneChild = item
+          return true
+        }
+      })
+
+      if(showingChildren.length === 1) {
+        return true
+      }
+
+      if(showingChildren.length === 0) {
+        this.onlyOneChild = {
+          ...parent,
+          path: ''
+        }
+
+        return true
+      }
+
+      return false
     }
   }
 }
