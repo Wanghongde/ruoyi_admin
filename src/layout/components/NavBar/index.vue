@@ -1,6 +1,6 @@
 <template>
   <div class="navbar-box">
-    <hamburger class="hanmburger" :isActive="isActive" @toggleClick="toggleSideBar"/>
+    <hamburger class="hanmburger" :isActive="isActive" @toggleClick="toggleSideBarFn"/>
     <breadcrumb class="breadcrumb" />
     <div class="right-menu">
       退出
@@ -11,20 +11,22 @@
 <script>
 import Hamburger from './hamburger.vue'
 import Breadcrumb from './breadcrumb.vue'
+import { mapState, mapMutations } from 'vuex'
 
 export default {
-  data() {
-    return {
-      isActive: false
-    }
-  },
   components: {
     Hamburger,
     Breadcrumb
   },
+  computed: {
+    ...mapState({
+      isActive: state => state.app.isActive
+    }),
+  },
   methods: {
-    toggleSideBar() {
-      this.isActive = !this.isActive
+    ...mapMutations(['toggleSideBar']),
+    toggleSideBarFn() {
+      this['toggleSideBar']()
     }
   }
 }

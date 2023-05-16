@@ -13,9 +13,8 @@ export const constRoutes = [
   },
   {
     path: '',
-    name: 'layout',
+    redirect: '/index',
     component: Layout,
-    hidden: false,
     children: [
       {
         path: '/index',

@@ -17,7 +17,7 @@ export default {
   props: {
     isActive: {
       type: Boolean,
-      default: false
+      default: true
     }
   },
   methods: {
@@ -30,8 +30,14 @@ export default {
 
 <style lang="scss">
 .hambur {
-  .is-active {
+  width: 20px;
+  height: 20px;
+  .hamburger {
     transform: rotate(180deg);
+  }
+
+  .is-active {
+    transform: rotate(0);
   }
 }
 

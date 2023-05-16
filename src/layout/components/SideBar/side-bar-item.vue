@@ -83,5 +83,7 @@ export default {
 </script>
 
 <style>
-
+.router-link-active .el-menu-item{
+  color: #ffd04b!important;
+}
 </style>

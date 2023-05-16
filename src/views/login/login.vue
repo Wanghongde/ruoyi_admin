@@ -81,7 +81,7 @@ export default {
 
           const query = this.$route.query
           if(query && query.redirect) {
-            return this.$router.push(query.redirect)
+            return this.$router.push(query.redirect).catch(() =>{})
           }
 
           this.$router.push('/')

@@ -3,6 +3,7 @@
     <logo></logo>
     <el-scrollbar class="scroll-box">
       <el-menu
+        :collapse-transition="false"
         :default-active="$route.path"
         class="el-menu-vertical-demo"
         :background-color="globalColor.menuBackground"
@@ -28,14 +29,10 @@ import globalColor from '@/styles/variables.module.scss'
 import { mapGetters } from 'vuex'
 
 export default {
+  props: ['isCollapse'],
   components: {
     Logo,
     SideBarItem
-  },
-  data() {
-    return {
-      isCollapse: false
-    }
   },
   computed:{
     ...mapGetters(['siderbarRouters']),
@@ -57,6 +54,7 @@ export default {
   height: 100%;
   color: #fff;
   background-color: $base-menu-background;
+  transition: all .2s ease;
   .scroll-box {
     height: 100%;
   }
