@@ -3,7 +3,13 @@
     <hamburger class="hanmburger" :isActive="isActive" @toggleClick="toggleSideBarFn"/>
     <breadcrumb class="breadcrumb" />
     <div class="right-menu">
-      退出
+      <img class="avatar" :src="avatar"/>
+      <div class="user-welcome">
+        {{name}}, 欢迎光临
+      </div>
+      <div class="logout" @click="logoutFn">
+        退出
+      </div>
     </div>
   </div>
 </template>
@@ -11,7 +17,9 @@
 <script>
 import Hamburger from './hamburger.vue'
 import Breadcrumb from './breadcrumb.vue'
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapGetters } from 'vuex'
+import { logout } from '@/api/user'
+import { removeToken } from '@/utlis/auth'
 
 export default {
   components: {
@@ -22,11 +30,37 @@ export default {
     ...mapState({
       isActive: state => state.app.isActive
     }),
+    ...mapGetters(['name', 'avatar'])
   },
   methods: {
     ...mapMutations(['toggleSideBar']),
     toggleSideBarFn() {
       this['toggleSideBar']()
+    },
+    logoutFn() {
+       this.$router.push('/login').catch(err => {})
+      this.$alert('确认退出嘛', '退出', {
+        confirmButtonText: '确定',
+        callback: async action => {
+          if(action === 'confirm') {
+            const { data: {msg} } = await logout()
+
+            removeToken()
+            this.$router.push('/login')
+
+            this.$message({
+              type: 'success',
+              message: msg
+            })
+          } else {
+             this.$message({
+              type: 'info',
+              message: '取消退出'
+            })
+          }
+
+        }
+      })
     }
   }
 }
@@ -52,8 +86,22 @@ export default {
     align-items: center;
   }
   .right-menu {
+    display: flex;
+    align-items: center;
     float:  right;
     line-height: 46px;
+    margin-right: 20px;
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 5px;
+      margin-right: 10px;
+    }
+    .logout {
+      user-select: none;
+      margin-left: 10px;
+      cursor: pointer;
+    }
   }
 }
 </style>

@@ -24,7 +24,7 @@ const user = {
       state.name = name
     },
     setAvatar(state, avatar) {
-      state.avatar = name
+      state.avatar = avatar
     }
   },
   actions: {
@@ -56,7 +56,7 @@ const user = {
             commit('setRoles', roles)
           }
 
-          commit('setName', user.username)
+          commit('setName', user.userName)
           commit('setAvatar', avatar)
 
           resolve(user)

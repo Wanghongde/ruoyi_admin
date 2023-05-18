@@ -40,6 +40,7 @@ export default {
       font-weight: 600;
       color: #fff;
       text-decoration: none;
+      white-space: nowrap;
     }
   }
 }

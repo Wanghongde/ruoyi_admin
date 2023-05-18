@@ -1,6 +1,6 @@
 const app = {
   state: {
-    isActive: true
+    isActive: false
   },
   mutations: {
     toggleSideBar(state) {
