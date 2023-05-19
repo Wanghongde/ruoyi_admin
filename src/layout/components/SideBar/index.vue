@@ -52,6 +52,7 @@ export default {
   left: 0;
   width: 200px;
   height: 100%;
+  z-index: 9999;
   color: #fff;
   background-color: $base-menu-background;
   transition: all .2s ease;
