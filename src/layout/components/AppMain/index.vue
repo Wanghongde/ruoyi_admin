@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <el-main>
     <router-view></router-view>
-  </div>
+  </el-main>
 </template>
 
 <script>
@@ -10,6 +10,9 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang="scss">
+.el-main {
+  margin: 20px;
+  background-color: #fff;
+}
 </style>

@@ -42,7 +42,8 @@ export default {
   .main-app-box {
     margin-left: 200px;
     min-height: 100%;
-  }
+    background-color: #cccccc17;
+}
 }
 
 .collapse-box {
