@@ -1,9 +1,8 @@
 import axios from 'axios'
 import { Message, MessageBox } from 'element-ui'
 import { getToken } from '@/utlis/auth'
+import { transParams } from '@/utlis/tools'
 import store from '@/store/index'
-
-const isRelogin = { flag: false }
 
 const instance = axios.create({
   baseURL: process.env.VUE_APP_BASEURL,
@@ -19,33 +18,35 @@ instance.interceptors.request.use(config => {
     config.headers.Authorization = `Bearer ${token}`
   }
 
+  if (config.method.toLowerCase() === 'get' && config.params) {
+    let url = config.url + '?' + transParams(config.params)
+
+    url = url.slice(0, -1)
+
+    config.params = {}
+
+    config.url = url
+  }
+
   return config
 }, err => {
   Message.error('请求失败')
 })
 
-instance.interceptors.response.use(async res => {
+instance.interceptors.response.use(res => {
   const {data, headers} = res
 
   if(data.code === 401) {
-    if(!isRelogin.flag) {
-      try {
-        isRelogin.flag = true
-
-        await MessageBox.$confirm('登录状态已过期，您可以继续留在该页面，或者重新登录', '提示', {
-          confirmButtonText: '重新登录',
-          cancelButtonText: '取消',
-          type: 'warning'
-        })
-        isRelogin.flag = false
-
-        await store.dispatch('logOut')
-        location.href = '/index'
-      } catch(e) {
-        isRelogin.flag = false
-      }
-    }
-    return Promise.reject(data.msg)
+    MessageBox.confirm('登录状态已过期，请重新登录', {
+      confirmButtonText: '重新登录',
+      cancelButtonText: '取消',
+      type: 'warning'
+    }).then(() => {
+      store.dispatch('logOut').then(() => {
+        location.href = '/'
+      })
+    }).catch(() => {
+    })
   } else if(data.code === 500) {
     Message.error(data.msg)
     return Promise.reject(data.msg)

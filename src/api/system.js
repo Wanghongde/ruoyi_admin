@@ -7,3 +7,10 @@ export const getRoleList = (params) => {
     params
   })
 }
+
+export function treeselect () {
+  return request({
+    url: '/system/menu/treeselect',
+    methods: 'GET'
+  })
+}

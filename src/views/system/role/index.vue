@@ -50,6 +50,7 @@
           size="mini"
           icon="el-icon-plus"
           plain
+          @click="handleAdd"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -140,11 +141,60 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange">
     </el-pagination>
+
+    <el-dialog :title="title" :visible.sync="open" width="500px">
+      <el-form label-width="100px" :model="form" ref="form"  :rules="rules">
+        <el-form-item label="角色名称" prop="roleName">
+          <el-input placeholder="请输入角色名称" v-model="form.roleName"/>
+        </el-form-item>
+        <el-form-item  prop="roleKey">
+          <span slot="label">
+            <el-tooltip content="控制器中定义的权限字符，如：@PreAuthorize(`@ss.hasRole('admin')`)" placement="top">
+              <i class="el-icon-question"></i>
+            </el-tooltip>
+            权限字符
+          </span>
+          <el-input placeholder="请输入权限字符" v-model="form.roleKey"/>
+        </el-form-item>
+        <el-form-item label="角色顺序" prop="roleSort">
+          <el-input-number controls-position="right" :min="0" v-model="form.roleSort"/>
+        </el-form-item>
+        <el-form-item label="状态">
+          <el-radio-group v-model="form.status">
+            <el-radio>正常</el-radio>
+            <el-radio>停用</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="菜单权限">
+          <el-checkbox v-model="menuExpand" @change="handleCheckedTreeExpand($event, 'menu')">展开/折叠</el-checkbox>
+          <el-checkbox v-model="menuNodeAll" @change="handleCheckedTreeNodeAll($event,'menu')">全选/全不选</el-checkbox>
+          <el-checkbox v-model="menuCheckStrictly" @change="handleCheckedTreeConnect($event,'menu')">父子联动</el-checkbox>
+          <el-tree
+            :data="menuOptions"
+            show-checkbox
+            class="tree-border"
+            empty-text="加载中，请稍候"
+            :props="defaultProps"
+            ref="menu"
+            node-key="id"
+            :check-strictly="!menuCheckStrictly"
+          >
+          </el-tree>
+        </el-form-item>
+        <el-form-item label="备注" prop="remark">
+          <el-input type="textarea" placeholder="请输入内容" v-model="form.remark"/>
+        </el-form-item>
+      </el-form>
+      <div slot="footer">
+        <el-button type="primary" @click="submitForm">确定</el-button>
+        <el-button @click="cancel">取消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getRoleList } from '@/api/system'
+import { getRoleList, treeselect as menuTreeselect } from '@/api/system'
 
 export default {
   data () {
@@ -163,7 +213,29 @@ export default {
         roleKey: [],
         status: []
       },
-      total: 0
+      total: 0,
+      title: '',
+      open: false,
+      form: {},
+      rules: {
+        roleName: [
+          {required: true, message: '角色名称不能为空', trigger: 'blur'}
+        ],
+        roleKey: [
+          {required: true, message: '权限字符不能为空', trigger: 'blur'}
+        ],
+        roleSort: [
+          {required: true, message: '角色排序不能为空', trigger: 'blur'}
+        ]
+      },
+      menuOptions: [],
+      defaultProps: {
+        children: 'children',
+        label: 'label'
+      },
+      menuExpand: false,
+      menuNodeAll: false,
+      menuCheckStrictly: false
     }
   },
   created() {
@@ -172,7 +244,8 @@ export default {
   methods: {
     handleUpdate () {},
     async getRoleListFn() {
-      const {data: {rows, total}} = await getRoleList(this.queryParams)
+      const params = this.addDateRange(this.queryParams, this.dateRange)
+      const {data: {rows, total}} = await getRoleList(params)
 
       this.roleList = rows
       this.total = total
@@ -190,14 +263,62 @@ export default {
       this.getRoleListFn()
     },
     resetFn() {
+      this.dateRange = []
       this.resetForm('roleForm')
       this.queryParams.pageNum = 1
       this.getRoleListFn()
+    },
+    handleAdd () {
+      this.open = true
+      this.title = '添加角色'
+
+      this.$nextTick(() => this.resetForm('form'))
+
+      this.getMenuTreeselect()
+    },
+    submitForm() {
+      this.$refs['form'].validate(valid => {
+        if(valid) {
+          console.log('gogo', this.form)
+        }
+      })
+    },
+    cancel() {
+      this.open = false
+      this.resetForm('form')
+    },
+    async getMenuTreeselect () {
+      const {data: {data}} = await menuTreeselect()
+
+      this.menuOptions = data
+    },
+    handleCheckedTreeExpand (val, type) {
+      if (type === 'menu') {
+        let treeList = this.menuOptions
+
+        for (let i = 0; i < treeList.length; i++) {
+          this.$refs.menu.store.nodesMap[treeList[i].id].expanded = val
+        }
+      }
+    },
+    handleCheckedTreeNodeAll (val, type) {
+      if (type === 'menu') {
+        this.$refs.menu.setCheckedNodes(val ? this.menuOptions: [])
+      }
+    },
+    handleCheckedTreeConnect (val, type) {
+      if (type === 'menu') {
+        this.menuCheckStrictly = val
+      }
     }
   }
 }
 </script>
 
-<style>
-
+<style lang="scss">
+.tree-border {
+  border: 1px solid #e5e6e7;
+  background: #fff;
+  border-radius: 4px;
+}
 </style>

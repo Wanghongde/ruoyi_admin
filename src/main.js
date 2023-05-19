@@ -4,7 +4,7 @@ import router from './router'
 import store from './store'
 import ElementUI from 'element-ui'
 import RightToolBar from '@/components/RightToolBar'
-import { resetForm } from '@/utlis/tools'
+import { resetForm, addDateRange } from '@/utlis/tools'
 import '@/assets/icons'
 import '@/permission'
 
@@ -15,7 +15,9 @@ Vue.config.productionTip = false
 
 Vue.use(ElementUI)
 Vue.component('RightToolBar', RightToolBar)
+
 Vue.prototype.resetForm = resetForm
+Vue.prototype.addDateRange = addDateRange
 
 new Vue({
   router,
